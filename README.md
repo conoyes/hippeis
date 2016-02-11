@@ -1,2 +1,20 @@
 # hippeis
-Modular smart home project hosted on Raspberry Pi 2
+*Server side of a home automation project written in Ruby*
+
+The server provides a RESTful JSON API for the clients.
+
+## API
+#### /temperature
+###### /reference
+* GET: query reference temperature
+* POST: set reference temperature
+
+###### /current
+* GET: query current temperature
+
+#### /lighting
+* GET: query current outside lighting in LUX
+
+#### /control
+* GET: query current state of temperature control
+* POST: enable/disable automatic temperature control
