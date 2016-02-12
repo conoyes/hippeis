@@ -5,20 +5,12 @@ The server provides a RESTful JSON API for the clients.
 
 ## API
 #### /temperature
-###### /reference
-* GET: query reference temperature
+* GET: query reference and current temperature
 * POST: set reference temperature
 
-###### /current
-* GET: query current temperature
-
 #### /lighting
-###### /reference
-* GET: query reference lighting
+* GET: query reference and current lighting
 * POST: set reference lighting
-
-###### /current
-* GET: query current outside lighting in LUX
 
 #### /control
 * GET: query current state of temperature control
