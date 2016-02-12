@@ -13,6 +13,11 @@ The server provides a RESTful JSON API for the clients.
 * GET: query current temperature
 
 #### /lighting
+###### /reference
+* GET: query reference lighting
+* POST: set reference lighting
+
+###### /current
 * GET: query current outside lighting in LUX
 
 #### /control

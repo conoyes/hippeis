@@ -14,26 +14,27 @@
 # limitations under the License.
 #
 
-require 'socket'
-require 'sinatra'
-require 'json'
-require_relative 'reference_temperature'
-require_relative 'api_temperature'
-require_relative 'api_lighting'
+class Temperature
+  @@celsius_offset = 273.15
 
-# use Rack::Auth::Basic do |username, password|
-#   username == 'admin' && password == 'secret'
-# end
+  def Temperature::celsius_offset
+    @@celsius_offset
+  end
 
-# the whole API is JSON based
-before do
-  content_type 'application/json'
-end
+  def initialize(temperature)
+    if temperature < 0
+      raise "temperature in Kelvin cannot be less than zero: #{temperature}"
+    else
+      # initialize temperature in Kelvin
+      @temperature = temperature
+    end
+  end
 
-not_found do
-  message = 
-  {
-    'http_code' => 404,
-    'message' => 'not found'
-  }.to_json
+  def getTemperature
+    @temperature
+  end
+
+  def getTemperatureInCelsius
+    @temperature - @@celsius_offset
+  end
 end

@@ -14,26 +14,19 @@
 # limitations under the License.
 #
 
-require 'socket'
-require 'sinatra'
-require 'json'
-require_relative 'reference_temperature'
-require_relative 'api_temperature'
-require_relative 'api_lighting'
+reference_temperature = ReferenceTemperature.new(273.15 + 25)
 
-# use Rack::Auth::Basic do |username, password|
-#   username == 'admin' && password == 'secret'
-# end
-
-# the whole API is JSON based
-before do
-  content_type 'application/json'
+# https://github.com/conoyes/hippeis#temperature
+get '/temperature' do
+  {
+    'current' => Temperature.celsius_offset + 10 + ::Random.new.rand(10),
+    'current_celsius' => 10 + ::Random.new.rand(10),
+    'reference' => reference_temperature.getTemperature,
+    'reference_celsius' => reference_temperature.getTemperatureInCelsius
+  }.to_json
 end
 
-not_found do
-  message = 
-  {
-    'http_code' => 404,
-    'message' => 'not found'
-  }.to_json
+post '/temperature' do
+  body = JSON.parse(request.body.read)
+  reference_temperature.setTemperature = body['reference']
 end

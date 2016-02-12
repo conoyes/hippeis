@@ -14,26 +14,10 @@
 # limitations under the License.
 #
 
-require 'socket'
-require 'sinatra'
-require 'json'
-require_relative 'reference_temperature'
-require_relative 'api_temperature'
-require_relative 'api_lighting'
-
-# use Rack::Auth::Basic do |username, password|
-#   username == 'admin' && password == 'secret'
-# end
-
-# the whole API is JSON based
-before do
-  content_type 'application/json'
+get '/lighting' do
+  
 end
 
-not_found do
-  message = 
-  {
-    'http_code' => 404,
-    'message' => 'not found'
-  }.to_json
+post '/lighting' do
+  
 end
