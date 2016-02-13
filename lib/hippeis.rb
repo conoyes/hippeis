@@ -18,8 +18,19 @@ require 'socket'
 require 'sinatra'
 require 'json'
 require_relative 'reference_temperature'
+require_relative 'authentication'
 require_relative 'api_temperature'
 require_relative 'api_lighting'
+require_relative 'api_admin'
+require_relative 'api_login'
+
+
+set :environment, :development
+set :port, 8080
+#disable :show_exceptions 
+set :sessions, :domain => 'legion.local'
+set :session_secret, 'super secret'
+
 
 # use Rack::Auth::Basic do |username, password|
 #   username == 'admin' && password == 'secret'
@@ -28,6 +39,10 @@ require_relative 'api_lighting'
 # the whole API is JSON based
 before do
   content_type 'application/json'
+
+  unless Authenticator.authenticate('abcde')
+    halt 403
+  end
 end
 
 not_found do
@@ -36,4 +51,8 @@ not_found do
     'http_code' => 404,
     'message' => 'not found'
   }.to_json
+end
+
+get '/**/*' do
+  pass
 end
