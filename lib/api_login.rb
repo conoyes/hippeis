@@ -16,10 +16,10 @@
 
 require 'sinatra'
 
-authenticated = false
-
-get '/login' do
-  {'message' => 'post data example: ' + {'username' => 'steve', 'password' => 'crazyStev1e'}.to_json }.to_json
+before '/login' do
+  if session['is_authenticated']
+    halt 200, 'already logged in'
+  end
 end
 
 post '/login' do
@@ -27,12 +27,17 @@ post '/login' do
   username = body['username']
   password = body['password']
 
-  unless Authenticator.authenticate(username, password)
-    {'message' => 'invalid credentials'}.to_json
-    session['is_authenticated'] = false
-    halt 403
+  if username.nil? || password.nil?
+    halt 400
   end
 
-  {'message' => 'authenticated'}.to_json
+  unless Authenticator.authenticate?(username, password)
+    logger.info "authentication unsuccessful: #{username}:#{password}"
+    halt 401
+  end
+
+  logger.info "authentication successful: #{username}:#{password}"
+  session['username'] = username
   session['is_authenticated'] = true
+  halt 200, 'login successful'
 end

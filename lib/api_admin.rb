@@ -16,8 +16,16 @@
 
 require 'sinatra'
 
-get '/admin' do
-  unless authenticated
-    redirect "/login", 303
+before '/admin/**/*' do
+  unless session['is_authenticated']
+    halt 401, 'log in first'
   end
+
+  unless Authenticator.has_role?(session['username'], 'administrators')
+    halt 403, 'administrator privilege required'
+  end
+end
+
+get '/admin/tools' do
+  'admin tools'
 end

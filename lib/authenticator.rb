@@ -15,14 +15,23 @@
 #
 
 class Authenticator
-  @@admin_key = 'abcde'
   @@valid_credentials =
   {
     'admin' => 'welcome123',
     'guest' => 'guest'
   }
 
-  def self.authenticate(login, password)
-    @@valid_credentials[login] == password
+  @@role_membership =
+  {
+    'administrators' => ['admin'],
+    'users' => ['admin', 'guest']
+  }
+
+  def self.authenticate?(username, password)
+    @@valid_credentials[username] == password
+  end
+
+  def self.has_role?(username, role)
+    @@role_membership[role].nil? ? false : @@role_membership[role].include?(username)
   end
 end

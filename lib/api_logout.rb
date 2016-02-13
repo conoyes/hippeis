@@ -16,25 +16,13 @@
 
 require 'sinatra'
 
-reference_temperature = ReferenceTemperature.new(273.15 + 25)
-
-before '/temperature' do
+before '/logout' do
   unless session['is_authenticated']
     halt 401, 'log in first'
   end
 end
 
-# https://github.com/conoyes/hippeis#temperature
-get '/temperature' do
-  {
-    'current' => Temperature.celsius_offset + 10 + ::Random.new.rand(10),
-    'current_celsius' => 10 + ::Random.new.rand(10),
-    'reference' => reference_temperature.getTemperature,
-    'reference_celsius' => reference_temperature.getTemperatureInCelsius
-  }.to_json
-end
-
-post '/temperature' do
-  body = JSON.parse(request.body.read)
-  reference_temperature.setTemperature = body['reference']
+post '/logout' do
+  session['is_authenticated'] = false
+  halt 200, 'logout successful'
 end

@@ -23,44 +23,20 @@ require_relative 'api_temperature'
 require_relative 'api_lighting'
 require_relative 'api_admin'
 require_relative 'api_login'
+require_relative 'api_logout'
 
 enable :sessions
 
 set :environment, :development
 set :port, 8080
+set :session_secret, "this is my little secret"
 #disable :show_exceptions 
 
-#set :session_secret, 'super secret'
-
-
-# use Rack::Auth::Basic do |username, password|
-#   username == 'admin' && password == 'secret'
-# end
-
 # the whole API is JSON based
-before do
+before '/**/*' do
   content_type 'application/json'
 end
 
 not_found do
-  message = 
-  {
-    'http_code' => 404,
-    'message' => 'not found'
-  }.to_json
-end
-
-get '/**/*' do
-  pass
-end
-
-get '/cookie/:value' do
-  session[params['value'][0]]
-end
-
-post '/cookie' do
-  body = JSON.parse(request.body.read)
-  body.each_pair { |key, value|
-    session[key] = value
-  }
+  halt 404
 end
