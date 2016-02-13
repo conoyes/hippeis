@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require 'sinatra'
+
 reference_temperature = ReferenceTemperature.new(273.15 + 25)
 
 # https://github.com/conoyes/hippeis#temperature

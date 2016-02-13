@@ -19,5 +19,20 @@ require 'sinatra'
 authenticated = false
 
 get '/login' do
-  'Login Page'
+  {'message' => 'post data example: ' + {'username' => 'steve', 'password' => 'crazyStev1e'}.to_json }.to_json
+end
+
+post '/login' do
+  body = JSON.parse(request.body.read)
+  username = body['username']
+  password = body['password']
+
+  unless Authenticator.authenticate(username, password)
+    {'message' => 'invalid credentials'}.to_json
+    session['is_authenticated'] = false
+    halt 403
+  end
+
+  {'message' => 'authenticated'}.to_json
+  session['is_authenticated'] = true
 end

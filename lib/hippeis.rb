@@ -18,18 +18,19 @@ require 'socket'
 require 'sinatra'
 require 'json'
 require_relative 'reference_temperature'
-require_relative 'authentication'
+require_relative 'authenticator'
 require_relative 'api_temperature'
 require_relative 'api_lighting'
 require_relative 'api_admin'
 require_relative 'api_login'
 
+enable :sessions
 
 set :environment, :development
 set :port, 8080
 #disable :show_exceptions 
-set :sessions, :domain => 'legion.local'
-set :session_secret, 'super secret'
+
+#set :session_secret, 'super secret'
 
 
 # use Rack::Auth::Basic do |username, password|
@@ -39,10 +40,6 @@ set :session_secret, 'super secret'
 # the whole API is JSON based
 before do
   content_type 'application/json'
-
-  unless Authenticator.authenticate('abcde')
-    halt 403
-  end
 end
 
 not_found do
@@ -55,4 +52,15 @@ end
 
 get '/**/*' do
   pass
+end
+
+get '/cookie/:value' do
+  session[params['value'][0]]
+end
+
+post '/cookie' do
+  body = JSON.parse(request.body.read)
+  body.each_pair { |key, value|
+    session[key] = value
+  }
 end

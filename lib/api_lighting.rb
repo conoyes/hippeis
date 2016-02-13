@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require 'sinatra'
+
 get '/lighting' do
   
 end

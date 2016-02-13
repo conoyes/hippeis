@@ -16,8 +16,13 @@
 
 class Authenticator
   @@admin_key = 'abcde'
+  @@valid_credentials =
+  {
+    'admin' => 'welcome123',
+    'guest' => 'guest'
+  }
 
-  def self.authenticate(api_key)
-    api_key == @@admin_key
+  def self.authenticate(login, password)
+    @@valid_credentials[login] == password
   end
 end
